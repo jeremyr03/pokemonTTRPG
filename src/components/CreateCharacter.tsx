@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 // import {calculate, Generations, Pokemon, Move, Field} from '@smogon/calc';
 import {Pokemon, PokemonClient} from "pokenode-ts";
+import {Col, Container, Row} from "react-bootstrap";
+import {CustomPokemon} from "../interfaces/CustomPokemon";
 
 const api = new PokemonClient({
     cacheOptions: {maxAge: 8.64e8, exclude: {query: false}},
@@ -9,6 +11,7 @@ const api = new PokemonClient({
 const CreateCharacter = () => {
     let [pokemonList, setPokemonList] = useState<Pokemon []>([]);
     let [currentPokemon, setCurrentPokemon] = useState<Pokemon>();
+    let [pokemonInfo, setPokemonInfo] = useState<CustomPokemon>();
 
     // get current pokemon details from API
     const getPokemon = async (pokemonName: string) => {
@@ -51,18 +54,25 @@ const CreateCharacter = () => {
     }, []);
 
     return (
-        <div className="pokemonSheet">
-            <div className="column1">
-                <select id="pokemonList" onChange={handleChange}>
-                    {pokemonList.map(({name,id}) => (
-                    <option value={id}>{name}</option>)
-                )}
-                </select><br/>
-                <img src={currentPokemon?.sprites.front_default || undefined} height="200px" alt={currentPokemon?.name}/>
-                <h1>{currentPokemon?.name ?? "Choose a pokemon..."}</h1>
-            </div>
-            <div className="column1">Test</div>
-        </div>
+        <>
+            <Container fluid>
+                <Row>
+                    <Col>
+                        <select id="pokemonList" onChange={handleChange}>
+                            {pokemonList.map(({name,id}) => (
+                                <option value={id}>{name}</option>)
+                            )}
+                        </select>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <h1>{currentPokemon?.name ?? "Choose a pokemon..."}</h1>
+                        <img src={currentPokemon?.sprites.front_default || undefined} height="200px" alt={currentPokemon?.name}/>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     )
 }
 
